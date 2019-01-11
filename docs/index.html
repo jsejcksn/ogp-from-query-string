@@ -45,7 +45,15 @@
           content: params.get('description')
         });
       }
-
+    }
+  </script>
+</head>
+<body>
+  <script>
+    'use strict';
+    
+    if (location.search) {
+      const params = new URLSearchParams(location.search);
       const ol = document.createElement('ol');
       for (const prop of params) {
         const li = document.createElement('li');
@@ -55,6 +63,5 @@
       document.body.appendChild(ol);
     }
   </script>
-</head>
-<body></body>
+</body>
 </html>
