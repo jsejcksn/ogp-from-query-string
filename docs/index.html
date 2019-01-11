@@ -2,11 +2,11 @@
 <html lang="en">
 
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta property="og:type" content="website" />
   
-	<script>
+  <script>
     'use strict';
     
     function genHeadEl (name, isEmptyEl, content, attrObj) {
@@ -45,6 +45,14 @@
           content: params.get('description')
         });
       }
+
+      const ol = document.createElement('ol');
+      for (const prop of params) {
+        const li = document.createElement('li');
+        li.textContent = `${prop}: params[prop]`;
+        ol.appendChild(li);
+      }
+      document.body.appendChild(ol);
     }
   </script>
 </head>
