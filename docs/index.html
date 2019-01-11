@@ -55,9 +55,9 @@
     if (location.search) {
       const params = new URLSearchParams(location.search);
       const ol = document.createElement('ol');
-      for (const prop of params) {
+      for (const [prop, value] of params) {
         const li = document.createElement('li');
-        li.textContent = `${prop}: params[prop]`;
+        li.textContent = `${prop}: ${value}`;
         ol.appendChild(li);
       }
       document.body.appendChild(ol);
