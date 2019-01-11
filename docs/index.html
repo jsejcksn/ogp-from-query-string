@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta property="og:type" content="website" />
+  
+	<script>
+    'use strict';
+    
+    function genHeadEl (name, isEmptyEl, content, attrObj) {
+      const el = document.createElement(name);
+      if (!isEmptyEl) {
+        el.textContent = content;
+      }
+      if (attrObj) {
+        for (const prop in attrObj) {
+          el.setAttribute(prop, attrObj[prop]);
+        }
+      }
+      document.head.appendChild(el);
+    }
+    
+    if (location.search) {
+      const params = new URLSearchParams(location.search);
+      
+      if (params.has('title')) {
+        genHeadEl('title', false, params.get('title'));
+        
+        genHeadEl('meta', true, '', {
+          property: 'og:title',
+          content: params.get('title')
+        });
+      }
+      
+      if (params.has('description')) {
+        genHeadEl('meta', true, '', {
+          name: 'description',
+          content: params.get('description')
+        });
+        
+        genHeadEl('meta', true, '', {
+          property: 'og:description',
+          content: params.get('description')
+        });
+      }
+    }
+  </script>
+</head>
+<body></body>
+</html>
