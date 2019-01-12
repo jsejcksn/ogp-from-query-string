@@ -9,7 +9,7 @@
   <script>
     'use strict';
     
-    function genHeadEl (name, isEmptyEl, content, attrObj) {
+    function genEl (name, isEmptyEl, content, attrObj, parent) {
       const el = document.createElement(name);
       if (!isEmptyEl) {
         el.textContent = content;
@@ -19,28 +19,29 @@
           el.setAttribute(prop, attrObj[prop]);
         }
       }
-      document.head.appendChild(el);
+      const parent = parent ? parent : document.head;
+      parent.appendChild(el);
     }
     
     if (location.search) {
       const params = new URLSearchParams(location.search);
       
       if (params.has('title')) {
-        genHeadEl('title', false, params.get('title'));
+        genEl('title', false, params.get('title'));
         
-        genHeadEl('meta', true, '', {
+        genEl('meta', true, '', {
           property: 'og:title',
           content: params.get('title')
         });
       }
       
       if (params.has('description')) {
-        genHeadEl('meta', true, '', {
+        genEl('meta', true, '', {
           name: 'description',
           content: params.get('description')
         });
         
-        genHeadEl('meta', true, '', {
+        genEl('meta', true, '', {
           property: 'og:description',
           content: params.get('description')
         });
@@ -54,12 +55,21 @@
     
     if (location.search) {
       const params = new URLSearchParams(location.search);
-      const ol = document.createElement('ol');
-      for (const [prop, value] of params) {
-        const li = document.createElement('li');
-        li.textContent = `${prop}: ${value}`;
-        ol.appendChild(li);
+
+      if (params.has('title')) {
+        genEl('h1', false, params.get('title'), null, document.body);
       }
+      
+      if (params.has('description')) {
+        genEl('p', false, params.get('description'), null, document.body);
+      }
+      
+      const ol = document.createElement('ol');
+
+      for (const [prop, value] of params) {
+        genEl('li', false, `${prop}: ${value}`, null, ol);
+      }
+      
       document.body.appendChild(ol);
     }
   </script>
