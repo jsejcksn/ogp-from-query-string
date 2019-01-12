@@ -9,7 +9,7 @@
   <script>
     'use strict';
     
-    function genEl (name, isEmptyEl, content, attrObj, parent) {
+    function genEl (name, isEmptyEl, content, attrObj, parent = document.head) {
       const el = document.createElement(name);
       if (!isEmptyEl) {
         el.textContent = content;
@@ -19,7 +19,6 @@
           el.setAttribute(prop, attrObj[prop]);
         }
       }
-      const parent = parent ? parent : document.head;
       parent.appendChild(el);
     }
     
