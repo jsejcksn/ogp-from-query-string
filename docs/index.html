@@ -9,17 +9,21 @@
   <script>
     'use strict';
     
-    function genEl (name, isEmptyEl, content, attrObj, parent = document.head) {
-      const el = document.createElement(name);
-      if (!isEmptyEl) {
-        el.textContent = content;
-      }
-      if (attrObj) {
-        for (const prop in attrObj) {
-          el.setAttribute(prop, attrObj[prop]);
+    function genEl (tagName, attributes, ...childNodes) {
+      const el = document.createElement(tagName);
+      if (attributes) {
+        for (const prop in attributes) {
+          el.setAttribute(prop, attributes[prop]);
         }
       }
-      parent.appendChild(el);
+      if (childNodes) {
+        for (let node of childNodes) {
+          if (typeof node === 'string') {
+            node = document.createTextNode(node);
+          }
+          el.appendChild(node);
+        }
+      }
       return el;
     }
     
@@ -27,24 +31,28 @@
       const params = new URLSearchParams(location.search);
       
       if (params.has('title')) {
-        genEl('title', false, params.get('title'));
+        document.head.appendChild(
+          genEl('title', null, params.get('title')));
         
-        genEl('meta', true, '', {
-          property: 'og:title',
-          content: params.get('title')
-        });
+        document.head.appendChild(
+          genEl('meta', {
+            property: 'og:title',
+            content: params.get('title')
+          }));
       }
       
       if (params.has('description')) {
-        genEl('meta', true, '', {
-          name: 'description',
-          content: params.get('description')
-        });
+        document.head.appendChild(
+          genEl('meta', {
+            name: 'description',
+            content: params.get('description')
+          }));
         
-        genEl('meta', true, '', {
-          property: 'og:description',
-          content: params.get('description')
-        });
+        document.head.appendChild(
+          genEl('meta', {
+            property: 'og:description',
+            content: params.get('description')
+          }));
       }
     }
   </script>
@@ -57,23 +65,26 @@
       const params = new URLSearchParams(location.search);
 
       if (params.has('title')) {
-        genEl('h1', false, params.get('title'), null, document.body);
+        document.body.appendChild(
+          genEl('h1', null, params.get('title')));
       }
       
       if (params.has('description')) {
-        genEl('p', false, params.get('description'), null, document.body);
+        document.body.appendChild(
+          genEl('p', null, params.get('description')));
       }
       
-      genEl('p', false, 'Query string parameters:', {
-        style: 'font-weight: bold;'
-      }, document.body);
+      document.body.appendChild(
+        genEl('p', {style: 'font-weight: bold;'}, 'Query string parameters:'));
       
-      const ol = genEl('ol', false, null, null, document.body);
+      const ol = document.body.appendChild(
+        genEl('ol'));
 
       for (const [prop, value] of params) {
-        const li = genEl('li', false, null, null, ol);
-        const pre = genEl('pre', false, null, null, li);
-        genEl('samp', false, `${prop}: ${value}`, null, pre);
+        ol.appendChild(
+          genEl('li', null,
+            genEl('pre', null,
+              genEl('samp', null, `${prop}: ${value}`))));
       }
     }
   </script>
