@@ -12,8 +12,15 @@
     function genEl (tagName, attributes, ...childNodes) {
       const el = document.createElement(tagName);
       if (attributes) {
-        for (const prop in attributes) {
-          el.setAttribute(prop, attributes[prop]);
+        for (const [prop, value] of Object.entries(attributes)) {
+          if (prop === 'style' && typeof value === 'object') {
+            for (const [declarationProp, declarationValue] of Object.entries(value)) {
+              el.style.setProperty(declarationProp, declarationValue);
+            }
+          }
+          else {
+            el.setAttribute(prop, value);
+          }
         }
       }
       if (childNodes) {
