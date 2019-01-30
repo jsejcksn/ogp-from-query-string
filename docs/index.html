@@ -14,7 +14,9 @@
       if (attributes) {
         for (const [prop, value] of Object.entries(attributes)) {
           if (prop === 'style' && (Array.isArray(value) || value instanceof Map)) {
-            this.style(el, value);
+            for (const declaration of value) {
+              el.style.setProperty(...declaration);
+            }
           }
           else {
             el.setAttribute(prop, value);
