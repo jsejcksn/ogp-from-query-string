@@ -13,10 +13,8 @@
       const el = document.createElement(tagName);
       if (attributes) {
         for (const [prop, value] of Object.entries(attributes)) {
-          if (prop === 'style' && typeof value === 'object') {
-            for (const [declarationProp, declarationValue] of Object.entries(value)) {
-              el.style.setProperty(declarationProp, declarationValue);
-            }
+          if (prop === 'style' && (Array.isArray(value) || value instanceof Map)) {
+            this.style(el, value);
           }
           else {
             el.setAttribute(prop, value);
